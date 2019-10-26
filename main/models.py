@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from localization_app.models import DataString
@@ -18,7 +20,9 @@ class Category(models.Model):
 class Question(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     text = models.ForeignKey(DataString, on_delete=models.CASCADE)
-    right_answer = models.ForeignKey('Answer', on_delete=models.CASCADE, related_name='right_answer', null=True, blank=True)
+    right_answer = models.ForeignKey('Answer', on_delete=models.CASCADE, related_name='right_answer', null=True,
+                                     blank=True)
+    points = models.IntegerField(default=0)
 
     def __str__(self):
         if self.category:
@@ -42,3 +46,15 @@ class Answer(models.Model):
     class Meta:
         verbose_name = 'Ответ'
         verbose_name_plural = 'Ответы'
+
+
+class GameSession(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    questions = models.ManyToManyField(Question, null=True, blank=True)
+
+    def __str__(self):
+        return '%s' % str(self.id)
+
+    class Meta:
+        verbose_name = 'Игровая сессия'
+        verbose_name_plural = 'Игровые сессии'
