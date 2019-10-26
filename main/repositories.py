@@ -21,12 +21,12 @@ class QuestionRepository:
             # Deprecated
             return Question.objects.order_by("?").first()
 
-        question = Question.objects.all().exclude(gamesession=game_session).order_by("?").first()
+        question = Question.objects.filter(category__in=categories).exclude(gamesession=game_session).order_by("?").first()
         if question is None:
             raise HttpException('No more questions', Errors.NOT_FOUND)
 
         cls.mark_asked_question(game_session, question)
-        is_last = not Question.objects.all().exclude(gamesession=game_session).exists()
+        is_last = not Question.objects.filter(category__in=categories).exclude(gamesession=game_session, category__in=categories).exists()
 
         return question, is_last
 

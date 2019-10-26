@@ -41,7 +41,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return 'ID: %d, %s' % (self.id, LocalizedStringRepository.get_default_localization(self.text))
+        return 'Answer ID: %d, %s' % (self.id, LocalizedStringRepository.get_default_localization(self.text))
 
     class Meta:
         verbose_name = 'Ответ'

@@ -1,17 +1,28 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Category)
+
+class QuestionInline(admin.TabularInline):
+    model = Question
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    inlines = [
+        QuestionInline,
+    ]
+
+
+admin.site.register(Category, CategoryAdmin)
 admin.site.register(Answer)
 
 
-class QuestionInline(admin.TabularInline):
+class AnswerInline(admin.TabularInline):
     model = Answer
 
 
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [
-        QuestionInline,
+        AnswerInline,
     ]
 
 
