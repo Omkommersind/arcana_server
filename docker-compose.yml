@@ -1,0 +1,43 @@
+version: '3'
+
+# Единый network нужен для того, чтобы контейнеры с приложениями видели контейнеры с базой
+networks:
+  backend:
+
+services:
+  # Контейнер с Postgres базой для приложения
+  db:
+    image: postgres
+    restart: always
+    networks:
+      - backend
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+  daphne:
+    build: .
+    restart: always
+    command: bash -c "python3 manage.py migrate && python3 manage.py collectstatic --noinput && gunicorn arcana_server.wsgi -b 0.0.0.0:8000"
+    environment:
+      DB_HOST: db
+      MACHINE_HOST: 127.0.0.1
+      HOST_IP: ${HOST_IP}
+      HOST_PORT: ${DAPHNE_PORT}
+      NGINX_PORT: ${NGINX_PORT}
+      HOST_DOMAIN: ${HOST_DOMAIN}
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - .:/code
+    ports:
+      - "127.0.0.1:8000:8000"
+    networks:
+      - backend
+    depends_on:
+      - db
