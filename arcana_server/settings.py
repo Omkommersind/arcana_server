@@ -59,7 +59,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'arcana_server.urls'
-ASGI_APPLICATION = 'arcana_server.routing.application'
+# ASGI_APPLICATION = 'arcana_server.routing.application'
 
 TEMPLATES = [
     {
@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = 'arcana_server.wsgi.application'
+WSGI_APPLICATION = 'arcana_server.wsgi.application'
 
 
 # Database
