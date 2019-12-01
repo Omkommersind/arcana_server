@@ -22,7 +22,7 @@ services:
   daphne:
     build: .
     restart: always
-    command: bash -c "python3 manage.py migrate && python3 manage.py collectstatic --noinput && gunicorn arcana_server.wsgi -b 0.0.0.0:8000"
+    command: bash -c "python3 manage.py migrate && python3 manage.py collectstatic --noinput && gunicorn arcana_server.wsgi -b 0.0.0.0:8088"
     environment:
       DB_HOST: db
       MACHINE_HOST: 127.0.0.1
@@ -36,7 +36,7 @@ services:
     volumes:
       - .:/code
     ports:
-      - "127.0.0.1:8000:8000"
+      - "127.0.0.1:8088:8088"
     networks:
       - backend
     depends_on:
