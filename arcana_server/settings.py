@@ -152,3 +152,8 @@ STATICFILES_DIRS = (
 )
 
 DEFAULT_LANGUAGE_CODE = 'en'
+
+try:
+    from .local_settings import *
+except ImportError as e:
+    pass
